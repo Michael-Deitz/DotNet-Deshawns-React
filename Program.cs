@@ -17,16 +17,44 @@ List<Dog> dogs = new List<Dog>
 
 List<Walker> walkers = new List<Walker>
 {
-    new Walker() { Id = 1, Name = "Alphonse Meron", Email = "ameron0@mashable.com", City = "Chicago"},
-    new Walker() { Id = 2, Name = "Damara Pentecust", Email = "dpentecust1@apache.org", City = "White Plains"},
-    new Walker() { Id = 3, Name = "Anna Bowton", Email = "abowton2$wisc.edu", City = "Sarasota"},
-    new Walker() { Id = 4, Name = "Hunfredo Drynan", Email = "hdrynan3@bizjournals.com", City = "San Diego"},
-    new Walker() { Id = 5, Name = "Elmira Bick", Email = "ebick@biblegateway.com", City = "Boise"},
-    new Walker() { Id = 6, Name = "Bernie Dreger", Email = "bdreager5@zimbio.com", City = "Denver"},
-    new Walker() { Id = 7, Name = "Rolando Gault", Email = "rgault6@google.com", City = "Tucson"},
-    new Walker() { Id = 8, Name = "Tiffanie Tubby", Email = "ttubby7@intel.com", City = "Phoenix"},
-    new Walker() { Id = 9, Name = "Tomlin Cutill", Email = "tcutill8@marketwatch.com", City = "Minneapolis"},
-    new Walker() { Id = 10, Name = "Arv Biddle0", Email = "abiddle9@cafepress.com", City = "Pittsburgh"}
+    new Walker() { Id = 1, Name = "Alphonse Meron"},
+    new Walker() { Id = 2, Name = "Damara Pentecust"},
+    new Walker() { Id = 3, Name = "Anna Bowton"},
+    new Walker() { Id = 4, Name = "Hunfredo Drynan"},
+    new Walker() { Id = 5, Name = "Elmira Bick"},
+    new Walker() { Id = 6, Name = "Bernie Dreger"},
+    new Walker() { Id = 7, Name = "Rolando Gault"},
+    new Walker() { Id = 8, Name = "Tiffanie Tubby"},
+    new Walker() { Id = 9, Name = "Tomlin Cutill"},
+    new Walker() { Id = 10, Name = "Arv Biddle0"}
+};
+
+List<City> cities = new List<City>
+{
+    new City() { Id = 1, Name = "Boise"},
+    new City() { Id = 2, Name = "Chicago"},
+    new City() { Id = 3, Name = "Denver"},
+    new City() { Id = 4, Name = "Minneapolis"},
+    new City() { Id = 5, Name = "Phoenix"},
+    new City() { Id = 6, Name = "Pittsburgh"},
+    new City() { Id = 7, Name = "San Diego"},
+    new City() { Id = 8, Name = "Sarasota"},
+    new City() { Id = 9, Name = "Tucson"},
+    new City() { Id = 10, Name = "White Plains"}
+};
+
+List<WalkerCity> walkerCities = new List<WalkerCity>
+{
+    new WalkerCity() { Id = 1, CityId = 2, WalkerId = 1},
+    new WalkerCity() { Id = 2, CityId = 10, WalkerId = 2},
+    new WalkerCity() { Id = 3, CityId = 8, WalkerId = 3},
+    new WalkerCity() { Id = 4, CityId = 7, WalkerId = 4},
+    new WalkerCity() { Id = 5, CityId = 1, WalkerId = 5},
+    new WalkerCity() { Id = 6, CityId = 3, WalkerId = 6},
+    new WalkerCity() { Id = 7, CityId = 9, WalkerId = 7},
+    new WalkerCity() { Id = 8, CityId = 5, WalkerId = 8},
+    new WalkerCity() { Id = 9, CityId = 4, WalkerId = 9},
+    new WalkerCity() { Id = 10, CityId = 6, WalkerId = 10},
 };
 
 
@@ -55,13 +83,17 @@ app.MapGet("/api/hello", () =>
 
 app.MapGet("/api/Dogs", () =>
 {
-    Walker walker = walkers.FirstOrDefault(w => w.Id == dogs.WalkerId);
-    return dogs.Select(dog => new Dog
-    {
-        Id = dog.Id,
-        Name = dog.Name,
-        WalkerId = dog.WalkerId
-    });
+   foreach (Dog dog in dogs)
+   {
+    Walker walker = walkers.FirstOrDefault(w => w.Id == dog.WalkerId);
+    City city = cities.FirstOrDefault(c => c.Id == walker.Id);
+   }
+   return dogs.Select(d => new DogDTO
+   {
+    Id = d.Id,
+    Name = d.Name,
+    WalkerId = d.WalkerId
+   });
 });
 
 
