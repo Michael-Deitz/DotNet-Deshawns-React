@@ -64,6 +64,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -72,6 +73,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(options =>
+            {
+              options.AllowAnyOrigin();
+              options.AllowAnyMethod();
+              options.AllowAnyHeader();
+            });
 }
 
 app.UseHttpsRedirection();
@@ -128,6 +135,43 @@ app.MapGet("/api/Dogs/{id}", (int id) =>
         Name = city.Name
     } : null
     };
+});
+
+app.MapPost("/api/dogs/create", (Dog dog) => 
+{
+    
+
+    // if (dog == null)
+    // {
+    //     return Results.BadRequest();
+    // }
+
+    dog.Id = dogs.Max(m => m.Id) + 1;
+    dogs.Add(dog);
+
+    return Results.Created($"/dogs/{dog.Id}", new DogDTO
+    {
+       Id = dog.Id,
+    Name = dog.Name,
+    WalkerId = dog.WalkerId,
+    CityId = dog.CityId,    
+    
+    });
+});
+
+app.MapGet("/api/city", () => 
+{
+    List<CityDTO> cityDTOs = new List<CityDTO>();
+     foreach (City city in cities)
+     {
+        cityDTOs.Add( new CityDTO
+        {
+            Id = city.Id,
+            Name = city.Name
+        });
+     }
+
+     return cityDTOs;
 });
 
 
