@@ -1,6 +1,6 @@
-import { getDogs, getGreeting } from "./apiManager";
+import { addDog, getDogs, getGreeting } from "./apiManager";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [greeting, setGreeting] = useState({
@@ -8,6 +8,7 @@ export default function Home() {
   });
   
   const [dogs, setDogs] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getGreeting()
@@ -23,7 +24,20 @@ export default function Home() {
     })
   }, [])
 
+  const handleCreate = () => {
+    navigate(`/create`)
+  }
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (event.target.id === "addDog")
+      addDog()
+    }
+  )
+
   return <div><header>{greeting.message}</header><div>YEEEEET</div>
+      <div><button id="addDog" onClick={handleCreate}>Add A Dog</button></div>
     {dogs.map((dog) => {
       return <div> 
         <div><Link to={`/${dog.id}`}><h2>{dog.name}</h2></Link></div>
