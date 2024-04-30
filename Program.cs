@@ -141,10 +141,10 @@ app.MapPost("/api/dogs/create", (Dog dog) =>
 {
     
 
-    // if (dog == null)
-    // {
-    //     return Results.BadRequest();
-    // }
+    if (dog == null)
+    {
+        return Results.BadRequest();
+    }
 
     dog.Id = dogs.Max(m => m.Id) + 1;
     dogs.Add(dog);
@@ -172,6 +172,27 @@ app.MapGet("/api/city", () =>
      }
 
      return cityDTOs;
+});
+
+app.MapGet("/api/walkers", () => 
+{
+    int id = 1;
+
+    Walker walker = walkers.FirstOrDefault(w => w.Id == id);
+    List<WalkerCity> walkerCitiesForWalker1 = walkerCities.Where(wc => wc.WalkerId == 1).ToList();
+
+    List<City> citiesFor1 = walkerCitiesForWalker1.Select(wc => cities.First(c => c.Id = wc.CityId)).ToList();
+    walker.Cities = citiesFor1;
+    
+    
+    foreach (City city in walker.Cities)
+    {
+        WalkerCity newWC = new WalkerCity
+        {
+            WalkerId = walker.Id,
+            CityId = city.Id
+    };~
+    }
 });
 
 
